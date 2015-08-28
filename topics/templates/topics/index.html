@@ -1,8 +1,12 @@
 {% extends "topics/base.html" %}
 {% block content %}
+<div style="float: right;">
+  <input id="keyword_input_id"><input id="keyword_add_button_id" type="submit" value="Add">
+</div>
 <h1>{{ room.title }}</h1>
 <div id="keyword_list_id">
 </div>
+
 <script>
  var TI = {
    keywords: [],
@@ -38,6 +42,20 @@
      jQuery.get( url, function( data ) {
        TI.updateKeywords( data );
      });
+   },
+
+   submitKeyword: function() {
+     var url = "{% url 'topics-add-keywords' room.title %}";
+     var newKeyword = jQuery.trim( $("#keyword_input_id").val() );
+     if( newKeyword == '' ) {
+       return false;
+     }
+     var data = { 'keyword': newKeyword };
+     jQuery.post( url, data, function( data ) {
+       TI.loadKeywords();
+       $("#keyword_input_id").val('');
+     });
+     return false;
    }
  };
 
@@ -45,6 +63,8 @@
    TI.loadKeywords();
 
    setInterval( TI.loadKeywords, 5000 );
+
+   $("#keyword_add_button_id").click( TI.submitKeyword );
  });
 </script>
 {% endblock %}
