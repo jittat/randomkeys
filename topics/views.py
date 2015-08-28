@@ -19,7 +19,6 @@ def list(request, room_title):
     keywords = room.keyword_set.all()
 
     names = [k.name for k in keywords]
-    print names
     json_data = json.dumps(names)
     
     return HttpResponse(json_data, content_type='application/json')
