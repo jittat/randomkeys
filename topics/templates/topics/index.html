@@ -1,0 +1,18 @@
+{% extends "topics/base.html" %}
+{% block content %}
+<h1>{{ room.title }}</h1>
+<div id="keyword_list_id">
+</div>
+<script>
+ var loadKeywords = function() {
+   var url = "{% url 'topics-keywords' room.title %}";
+   jQuery.get(url,function(data) {
+     console.log(data);
+   });
+ };
+
+ $(function(){
+   loadKeywords();
+ });
+</script>
+{% endblock %}
