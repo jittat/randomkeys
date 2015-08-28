@@ -1,13 +1,29 @@
 {% extends "topics/base.html" %}
 {% block content %}
-<div style="float: right;">
-  <input id="keyword_input_id"><input id="keyword_add_button_id" type="submit" value="Add">
+<div style="float: right; padding: 5px;">
+  <input id="keyword_input_id">
+  <input id="keyword_add_button_id" type="submit" value="Add">
+  <button id="menu_toggle_id">&#9776;</button>
 </div>
-<h1>{{ room.title }}</h1>
+<div id="header">{{ room.title }}</div>
+
+{% include "topics/include/menu.html" %}
+
 <div id="keyword_list_id">
 </div>
 
 <script>
+ // This is from http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+ function shuffleArray(array) {
+   for (var i = array.length - 1; i > 0; i--) {
+     var j = Math.floor(Math.random() * (i + 1));
+     var temp = array[i];
+     array[i] = array[j];
+     array[j] = temp;
+   }
+   return array;
+ }
+ 
  var TI = {
    keywords: [],
    
@@ -19,11 +35,22 @@
      return '<div class="keyword-rows clearfix"></div>';
    },
 
+   colorRows: function() {
+     $(".keyword-rows").each(function(i, elt) {
+       if(i % 2 == 0) {
+         $( elt ).removeClass("odd");
+       } else {
+         $( elt ).addClass("odd");
+       }
+     });
+   },
+   
    addKeywordToList: function( keyword ) {
      var lastRow = $("#keyword_list_id").find(".keyword-rows").last();
      if ( !lastRow.length ) {
        $("#keyword_list_id").append( TI.emptyRowHtml() );
        lastRow = $("#keyword_list_id").find(".keyword-rows").last();
+       TI.colorRows();
      }
      lastRow.append( TI.keywordHtml( keyword ) );
    },
@@ -56,6 +83,23 @@
        $("#keyword_input_id").val('');
      });
      return false;
+   },
+
+   randomKeyword: function( rowSize ) {
+     $(".keywords").detach();
+     $(".keyword-rows").detach();
+     var keywords = TI.keywords;
+     var rowCount = Math.floor( (keywords.length + rowSize - 1) / rowSize );
+     for ( var i = 0; i < rowCount; i++ ) {
+       $("#keyword_list_id").append( TI.emptyRowHtml() );
+     }
+     TI.colorRows();
+     shuffleArray( keywords );
+     var rows = $("#keyword_list_id").find(".keyword-rows");
+     keywords.forEach(function( k, i ) {
+       var ri = Math.floor( i / rowSize );
+       $( rows[ ri ] ).append( TI.keywordHtml( k ) );
+     });
    }
  };
 
@@ -65,6 +109,16 @@
    setInterval( TI.loadKeywords, 5000 );
 
    $("#keyword_add_button_id").click( TI.submitKeyword );
+
+   $("#menu_toggle_id").click(function(){
+     $("#menu_id").slideToggle();
+   });
+
+   $("#random_button_id").click(function(){
+     var rowSize = parseInt( $("#row_size_id").val() );
+     TI.randomKeyword( rowSize );
+     return false;
+   });
  });
 </script>
 {% endblock %}

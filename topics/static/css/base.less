@@ -1,3 +1,9 @@
+body {
+    padding: 0;
+    margin: 0;
+    background: #f7f7f7;
+}
+
 .clearfix:after { 
    content: " ";
    display: block; 
@@ -5,13 +11,22 @@
    clear: both;
 }
 
-#content h1 {
+#content #header {
+    background: white;
     border-bottom: 1px solid black;
+    font-size: 150%;
+    font-weight: bold;
+    height: 30px;
+    padding: 5px;
 }
 
 .keyword-rows {
     border-bottom: 1px solid #e0e0e0;
     background: #a0a0a0;
+}
+
+.keyword-rows.odd {
+    background: #aeaeae;
 }
 
 .keyword-rows .keywords {
@@ -22,4 +37,10 @@
     margin: 5px;
     border: 1px solid gray;
     border-radius: 5px;
+}
+
+.menu-bar {
+    background: #dddddd;
+    padding: 5px;
+    text-align: right;
 }
