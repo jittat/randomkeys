@@ -4,15 +4,47 @@
 <div id="keyword_list_id">
 </div>
 <script>
- var loadKeywords = function() {
-   var url = "{% url 'topics-keywords' room.title %}";
-   jQuery.get(url,function(data) {
-     console.log(data);
-   });
+ var TI = {
+   keywords: [],
+   
+   keywordHtml: function( keyword ) {
+     return '<div class="keywords">' + keyword + '</div>';
+   },
+
+   emptyRowHtml: function() {
+     return '<div class="keyword-rows clearfix"></div>';
+   },
+
+   addKeywordToList: function( keyword ) {
+     var lastRow = $("#keyword_list_id").find(".keyword-rows").last();
+     if ( !lastRow.length ) {
+       $("#keyword_list_id").append( TI.emptyRowHtml() );
+       lastRow = $("#keyword_list_id").find(".keyword-rows").last();
+     }
+     lastRow.append( TI.keywordHtml( keyword ) );
+   },
+ 
+   updateKeywords: function( keys ) {
+     keys.forEach(function( k, i ) {
+       if ( TI.keywords.indexOf( k ) == -1 ) {
+         TI.keywords.push( k );
+         TI.addKeywordToList( k );
+       }
+     });
+   },
+ 
+   loadKeywords: function() {
+     var url = "{% url 'topics-keywords' room.title %}";
+     jQuery.get( url, function( data ) {
+       TI.updateKeywords( data );
+     });
+   }
  };
 
  $(function(){
-   loadKeywords();
+   TI.loadKeywords();
+
+   setInterval( TI.loadKeywords, 5000 );
  });
 </script>
 {% endblock %}
