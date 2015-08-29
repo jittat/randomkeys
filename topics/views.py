@@ -4,6 +4,12 @@ import json
 
 from models import Room, Keyword
 
+def room_list(request):
+    rooms = Room.objects.all()
+    return render(request,
+                  'topics/room_list.html',
+                  { 'rooms': rooms })
+
 def index(request, room_title):
     room, is_created = Room.objects.get_or_create(title=room_title)
 

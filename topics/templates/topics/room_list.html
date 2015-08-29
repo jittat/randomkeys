@@ -1,0 +1,11 @@
+{% extends "topics/base.html" %}
+{% block content %}
+<div id="header">Rooms</div>
+<ul>
+  {% for room in rooms %}
+    <li>
+      <a href="{% url 'topics-index' room.title %}">{{ room.title }}</a> ({{ room.keyword_set.all|length }})
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
