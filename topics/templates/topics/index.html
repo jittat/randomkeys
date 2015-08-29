@@ -53,6 +53,7 @@
        TI.colorRows();
      }
      lastRow.append( TI.keywordHtml( keyword ) );
+     $(lastRow).sortable({ connectWith: 'keywords' });
    },
  
    updateKeywords: function( keys ) {
@@ -100,6 +101,7 @@
        var ri = Math.floor( i / rowSize );
        $( rows[ ri ] ).append( TI.keywordHtml( k ) );
      });
+     $(".keyword-rows").sortable({ connectWith: 'keywords' });
    }
  };
 
